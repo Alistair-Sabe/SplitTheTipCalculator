@@ -12,6 +12,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alistair.splitthetipcalculator.components.InputField
 import com.alistair.splitthetipcalculator.ui.theme.SplitTheTipCalculatorTheme
+import com.alistair.splitthetipcalculator.widgets.RoundButtonIcon
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,8 +114,12 @@ fun BillForm(modifier: Modifier = Modifier,
             border = BorderStroke(width = 1.dp, Color.LightGray)
 
         ) {
-            Column() {
-                InputField(valueState = totalBillState,
+            Column(modifier = Modifier.padding(6.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start) {
+
+                InputField(
+                    valueState = totalBillState,
                     labelId = "Enter Bill Total",
                     enabled = true,
                     isSingleLine = true,
@@ -123,6 +131,36 @@ fun BillForm(modifier: Modifier = Modifier,
                         keyboardController?.hide()
 
                     })
+
+                if (validState) {
+                    Row(modifier = Modifier.padding(3.dp),
+                    horizontalArrangement = Arrangement.Start) {
+                        Text(text = "Split",
+                        modifier = Modifier.align(alignment = Alignment.CenterVertically))
+
+                        Spacer(modifier = Modifier.width(120.dp))
+
+                        Row(modifier = Modifier.padding(horizontal = 3.dp),
+                        horizontalArrangement = Arrangement.End) {
+
+                            //minus button
+                            RoundButtonIcon(
+                                imageVector = Icons.Default.Remove,
+                                onClick = { /*TODO*/ Log.d("Icon", "Subtract")})
+
+                            //plus button
+                            RoundButtonIcon(
+                                imageVector = Icons.Default.Add,
+                                onClick = { /*TODO*/ Log.d("Icon", "Add")})
+
+
+                        }
+                    }
+                }else {
+                    Box() {
+
+                    }
+                }
 
 
             }
