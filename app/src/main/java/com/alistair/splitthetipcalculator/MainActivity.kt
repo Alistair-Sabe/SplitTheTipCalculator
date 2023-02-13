@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -147,6 +148,12 @@ fun BillForm(modifier: Modifier = Modifier,
                             RoundButtonIcon(
                                 imageVector = Icons.Default.Remove,
                                 onClick = { /*TODO*/ Log.d("Icon", "Subtract")})
+
+                            //Text
+
+                            Text(text = "1",
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                                .padding(start = 9.dp, end = 9.dp))
 
                             //plus button
                             RoundButtonIcon(
