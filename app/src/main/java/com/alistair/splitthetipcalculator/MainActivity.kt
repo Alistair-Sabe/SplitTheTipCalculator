@@ -35,6 +35,7 @@ import com.alistair.splitthetipcalculator.ui.theme.SplitTheTipCalculatorTheme
 import com.alistair.splitthetipcalculator.widgets.RoundButtonIcon
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -62,6 +63,7 @@ fun MyApp(content: @Composable () -> Unit) {
 fun TopHeader(totalPerPerson: Double = 100.0) {
     Surface(modifier = Modifier
         .fillMaxWidth()
+        .padding(19.dp)
         .height(150.dp)
         .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
 
@@ -84,17 +86,16 @@ fun TopHeader(totalPerPerson: Double = 100.0) {
     
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@ExperimentalComposeUiApi
 @Preview
 @Composable
 fun MainContent(){
-    BillForm() { billAmt ->
-        Log.d("AMT", "MainContent: $billAmt"
-
-        )
+    Column(modifier = Modifier.padding(all = 12.dp)) {
+        BillForm() { billAmt ->
+            Log.d("AMT", "MainContent: ${billAmt.toInt() * 100}")
+        }
     }
 }
-
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -112,6 +113,7 @@ fun BillForm(modifier: Modifier = Modifier,
         val sliderPositionState =  remember {
             mutableStateOf(0f)
         }
+        TopHeader()
 
         Surface(
             modifier = Modifier
@@ -195,7 +197,12 @@ fun BillForm(modifier: Modifier = Modifier,
                     onValueChange = { newVal ->
                         sliderPositionState.value = newVal
                         Log.d("Slider", "BillForm: $newVal")
-                    })
+                    },
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                steps = 5,
+                onValueChangeFinished = {
+
+                })
 
                 }
 //                }else {
