@@ -32,6 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alistair.splitthetipcalculator.components.InputField
 import com.alistair.splitthetipcalculator.ui.theme.SplitTheTipCalculatorTheme
+import com.alistair.splitthetipcalculator.util.calculateTotalPerPerson
+import com.alistair.splitthetipcalculator.util.calculateTotalTip
 import com.alistair.splitthetipcalculator.widgets.RoundButtonIcon
 
 class MainActivity : ComponentActivity() {
@@ -122,7 +124,14 @@ fun BillForm(modifier: Modifier = Modifier,
 
         val range = IntRange (start = 1, endInclusive = 100)
 
-        TopHeader()
+        val tipAmountState = remember {
+            mutableStateOf(0.0)
+        }
+        val totalPerPersonState = remember {
+            mutableStateOf(0.0)
+        }
+
+        TopHeader(totalPerPerson = totalPerPersonState.value)
 
         Surface(
             modifier = Modifier
@@ -166,8 +175,11 @@ fun BillForm(modifier: Modifier = Modifier,
                                 onClick = {
                                     splitByState.value =
                                         if (splitByState.value > 1) splitByState.value - 1
-
                                         else 1
+
+                                    totalPerPersonState.value = calculateTotalPerPerson(totalBillState.value.toDouble(),
+                                        splitBy = splitByState.value,
+                                        tipPercentage = tipPercentage)
                                 })
 
                             //Text
@@ -183,12 +195,12 @@ fun BillForm(modifier: Modifier = Modifier,
                                 onClick = {
                                     if (splitByState.value < range.last) {
                                         splitByState.value = splitByState.value + 1
-                                        Log.d("ADD", "Plus one")
+
+                                        totalPerPersonState.value = calculateTotalPerPerson(totalBillState.value.toDouble(),
+                                            splitBy = splitByState.value,
+                                            tipPercentage = tipPercentage)
                                     }
-
                                 })
-
-
                         }
                     }
 
@@ -200,7 +212,7 @@ fun BillForm(modifier: Modifier = Modifier,
                     modifier = Modifier.align(alignment = CenterVertically))
                     Spacer(modifier = Modifier.width(200.dp))
 
-                    Text(text = "$10.00",
+                    Text(text = "${tipAmountState.value}",
                         modifier = Modifier.align(alignment = CenterVertically))
                 }
 
@@ -215,7 +227,13 @@ fun BillForm(modifier: Modifier = Modifier,
                 Slider(value = sliderPositionState.value,
                     onValueChange = { newVal ->
                         sliderPositionState.value = newVal
-                        Log.d("Slider", "BillForm: $newVal")
+                        tipAmountState.value = calculateTotalTip(totalBill = totalBillState.value.toDouble()
+                            ,tipPercentage = tipPercentage)
+
+                        totalPerPersonState.value = calculateTotalPerPerson(totalBillState.value.toDouble(),
+                        splitBy = splitByState.value,
+                        tipPercentage = tipPercentage)
+
                     },
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                 steps = 5,
@@ -224,15 +242,9 @@ fun BillForm(modifier: Modifier = Modifier,
                 })
 
                 }
-//                }else {
-//                    Box() {
-//
-//                    }
-//                }
-
-
             }
-
         }
     }
+
+
 
