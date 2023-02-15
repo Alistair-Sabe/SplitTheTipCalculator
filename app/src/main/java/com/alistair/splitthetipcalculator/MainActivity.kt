@@ -113,6 +113,13 @@ fun BillForm(modifier: Modifier = Modifier,
         val sliderPositionState =  remember {
             mutableStateOf(0f)
         }
+
+        val splitByState = remember {
+            mutableStateOf(1)
+        }
+
+        val range = IntRange (start = 1, endInclusive = 100)
+
         TopHeader()
 
         Surface(
@@ -145,7 +152,7 @@ fun BillForm(modifier: Modifier = Modifier,
                      Row(modifier = Modifier.padding(3.dp),
                     horizontalArrangement = Arrangement.Start) {
                         Text(text = "Split",
-                        modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                        modifier = Modifier.align(alignment = CenterVertically))
 
                         Spacer(modifier = Modifier.width(120.dp))
 
@@ -153,21 +160,31 @@ fun BillForm(modifier: Modifier = Modifier,
                         horizontalArrangement = Arrangement.End) {
 
                             //minus button
-                            RoundButtonIcon(
-                                imageVector = Icons.Default.Remove,
-                                onClick = { /*TODO*/ Log.d("Icon", "Subtract")})
+                            RoundButtonIcon(imageVector = Icons.Default.Remove,
+                                onClick = {
+                                    splitByState.value =
+                                        if (splitByState.value > 1) splitByState.value - 1
+
+                                        else 1
+                                })
 
                             //Text
 
-                            Text(text = "1",
+                            Text(text = "${splitByState.value}",
                             modifier = Modifier
-                                .align(Alignment.CenterVertically)
+                                .align(CenterVertically)
                                 .padding(start = 9.dp, end = 9.dp))
 
                             //plus button
                             RoundButtonIcon(
                                 imageVector = Icons.Default.Add,
-                                onClick = { /*TODO*/ Log.d("Icon", "Add")})
+                                onClick = {
+                                    if (splitByState.value < range.last) {
+                                        splitByState.value = splitByState.value + 1
+                                        Log.d("ADD", "Plus one")
+                                    }
+
+                                })
 
 
                         }
@@ -178,11 +195,11 @@ fun BillForm(modifier: Modifier = Modifier,
                     , vertical = 12.dp)
                 ){
                     Text(text = "Tip",
-                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                    modifier = Modifier.align(alignment = CenterVertically))
                     Spacer(modifier = Modifier.width(200.dp))
 
                     Text(text = "$10.00",
-                        modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                        modifier = Modifier.align(alignment = CenterVertically))
                 }
 
                 Column(verticalArrangement = Arrangement.Center,
