@@ -159,7 +159,7 @@ fun BillForm(modifier: Modifier = Modifier,
 
                     })
 
-                //f (validState) {
+                if (validState) {
                      Row(modifier = Modifier.padding(3.dp),
                     horizontalArrangement = Arrangement.Start) {
                         Text(text = "Split",
@@ -242,9 +242,14 @@ fun BillForm(modifier: Modifier = Modifier,
                 })
 
                 }
+
+            } else {
+                Box() {}
             }
         }
+        }
     }
+
 
 
 
